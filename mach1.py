@@ -20,25 +20,44 @@ class Mach1():
 	# microstep in mm
 	microstep = 0.00009921875
 
-	def __init__(self):
+	def __init__(self, oscPort = "COM1", zaberStagePort = 2):
+		"""
+		initialize variables.
+		oscPort - Port for oscilloscope.  COM1 by default.  Could be COM2 or 3 as well.
+		zaberStagePort - Port for zaber stage.  2 by default.  Could be 0 or 1.
+		"""
 		# Serial() input depends on where stage is connected
-		self.stage = serial.Serial(2)
-		self.osc = TDS3k(serial.Serial("COM1", 9600, timeout=1))
+		self.stage = serial.Serial(oscPort)
+		# 9600 = baudrate
+		self.osc = TDS3k(serial.Serial(zaberStagePort, 9600, timeout=1))
 
 	def convertSpeed(self, v):
 		"""
+		Converts v to units that make sense to stage and returns converted
+		__Variables__
 		v - in mm/s
-			converts v to units that make sense to stage and returns converted
 		"""
 		converted = 1/(Mach1.microstep*9.375)
 		return converted
 
-	def zaberMove(self, command = None, data = None):
+	def zaberMove(self, stage, command = None, data = None):
+		"""
+		Moves horizontal or vertical translation stage data mm.
+		__Variables__
+		stage - "hor" or "ver"
+		command - one of the movement commands from the cmd dictionary.
+		data - a distance in mm.
+		"""
 		if command == None or data == None:
 			Exception("Method zaberMove must take inputs command, data.")
+		else:
+			dist = self.convertSpeed(data)
+			self.zaberSend(Mach1.translation[stage], command, dist)
 
 	def setSpeed(self, v):
 		"""
+		Sets both translation stage speeds
+		__Variables__
 		v - speed to set in mm
 		converts to numbers that the stage wants and calls a command in the cmd dictionary
 		"""
