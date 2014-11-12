@@ -1,10 +1,12 @@
 """
 mach1.py
+Brian Perrett
+11/12/2014
+
+Helps to use the zaber stage and Tektronix oscilloscope
 """
 import serial, struct, time, glob, sys
 from pytek import TDS3k
-import matplotlib.pyplot as plt
-import numpy as np
 
 class Mach1():
 	# static variables
@@ -30,6 +32,24 @@ class Mach1():
 		self.stage = serial.Serial(oscPort)
 		# 9600 = baudrate
 		self.osc = TDS3k(serial.Serial(zaberStagePort, 9600, timeout=1))
+
+	def zaberReceive(self):
+		# return 6 bytes from the receive buffer
+		# there must be 6 bytes to receive (no error checking)
+		r = [0,0,0,0,0,0]
+		for i in range (6):
+			r[i] = ord(self.stage.read(1))
+			return r
+
+	def zaberSend(self, device, command, data=0):
+		"""
+		send a packet using the specified device number, command number, and data
+		The data argument is optional and defaults to zero
+		"""
+		packet = struct.pack('<BBl', device, command, data)
+		self.stage.write(packet)
+		r = self.zaberRecieve()
+		return r
 
 	def convertSpeed(self, v):
 		"""
@@ -65,24 +85,6 @@ class Mach1():
 		# set both stage speeds
 		self.zaberSend(Mach1.translation["hor"], self.cmd["setTargetSpeed"], data = converted)
 		self.zaberSend(Mach1.translation["ver"], self.cmd["setTargetSpeed"], data = converted)
-
-	def zaberReceive(self):
-		# return 6 bytes from the receive buffer
-		# there must be 6 bytes to receive (no error checking)
-		r = [0,0,0,0,0,0]
-		for i in range (6):
-			r[i] = ord(self.stage.read(1))
-			return r
-
-	def zaberSend(self, device, command, data=0):
-		"""
-		send a packet using the specified device number, command number, and data
-		The data argument is optional and defaults to zero
-		"""
-		packet = struct.pack('<BBl', device, command, data)
-		self.stage.write(packet)
-		r = self.zaberRecieve()
-		return r
 
 	def getSingleMeasurement(self, ch = "CH1"):
 		"""
