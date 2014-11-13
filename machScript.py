@@ -34,8 +34,8 @@ def snake(diameter, dx, dev):
 	returns x, y, v1, v2 for first scan and then reversed x_2, y_2, v1_2, v2_2 of second scan
 	"""
 	print("storing locations...")
-	dev.zaberStoreLocation(dev.translation["hor"], 1)
-	dev.zaberStoreLocation(dev.translation["ver"], 2) #different address just in case stage combines memory or something
+	dev.zaberStoreLocation("hor", 1)
+	dev.zaberStoreLocation("ver", 2) #different address just in case stage combines memory or something
 	currentX = 0
 	currentY = 0
 	total_dist = 0

@@ -48,8 +48,9 @@ class Mach1():
 		"""
 		send a packet using the specified device number, command number, and data
 		The data argument is optional and defaults to zero
+		device - "hor" or "ver"
 		"""
-		packet = struct.pack('<BBl', device, command, data)
+		packet = struct.pack('<BBl', self.translation[device], command, data)
 		self.stage.write(packet)
 		r = self.zaberReceive()
 		return r
@@ -101,7 +102,7 @@ class Mach1():
 			raise Exception("Method zaberMove must take inputs command, data.")
 		else:
 			dist = self.convertDistance(data)
-			r = self.zaberSend(Mach1.translation[stage], command, dist)
+			r = self.zaberSend(stage, command, dist)
 		return r
 		
 	def setSpeed(self, v):
