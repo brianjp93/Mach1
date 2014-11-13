@@ -15,10 +15,13 @@ class Mach1():
 	"moveAbsolute": 20, 
 	"moveRelative": 21,
 	"setTargetSpeed": 42,
-	"storeCurrentPosition": 16
+	"storeCurrentPosition": 16,
+	"returnStoredPosition": 17,
+	"moveToStoredPosition": 18,
+	"returnStatus": 54
 	}
 
-	translation = {"hor": 0, "ver": 1}
+	translation = {"hor": 1, "ver": 2}
 	# microstep in mm
 	microstep = 0.00009921875
 
@@ -29,9 +32,9 @@ class Mach1():
 		zaberStagePort - Port for zaber stage.  2 by default.  Could be 0 or 1.
 		"""
 		# Serial() input depends on where stage is connected
-		self.stage = serial.Serial(oscPort)
+		self.stage = serial.Serial(zaberStagePort)
 		# 9600 = baudrate
-		self.osc = TDS3k(serial.Serial(zaberStagePort, 9600, timeout=1))
+		self.osc = TDS3k(serial.Serial(oscPort, 9600, timeout=1))
 
 	def zaberReceive(self):
 		# return 6 bytes from the receive buffer
@@ -48,16 +51,42 @@ class Mach1():
 		"""
 		packet = struct.pack('<BBl', device, command, data)
 		self.stage.write(packet)
-		r = self.zaberRecieve()
+		r = self.zaberReceive()
 		return r
+		
+	def zaberStoreLocation(self, stage, address):
+		"""
+		stores location data at given address in the zaber stage.
+		__Variables__
+		stage - hor or ver
+		address - number 0-15
+		"""
+		self.zaberSend(stage, self.cmd["storeCurrentPosition"], address)
 
+	def zaberMoveToStoredLocation(self, stage, address):
+		"""
+		Moves to stored location at given address in the zaber stage.
+		__Variables__
+		stage - hor or ver
+		address - number 0-15
+		"""
+		self.zaberSend(stage, self.cmd["moveToStoredPosition"], address)
+
+	def convertDistance(self, mm):
+		"""
+		converts mm to microsteps
+		__Variables__
+		mm - millimeters 
+		"""
+		return mm/(self.microstep)
+		
 	def convertSpeed(self, v):
 		"""
 		Converts v to units that make sense to stage and returns converted
 		__Variables__
 		v - in mm/s
 		"""
-		converted = 1/(Mach1.microstep*9.375)
+		converted = v/(Mach1.microstep*9.375)
 		return converted
 
 	def zaberMove(self, stage, command = None, data = None):
@@ -69,11 +98,12 @@ class Mach1():
 		data - a distance in mm.
 		"""
 		if command == None or data == None:
-			Exception("Method zaberMove must take inputs command, data.")
+			raise Exception("Method zaberMove must take inputs command, data.")
 		else:
-			dist = self.convertSpeed(data)
-			self.zaberSend(Mach1.translation[stage], command, dist)
-
+			dist = self.convertDistance(data)
+			r = self.zaberSend(Mach1.translation[stage], command, dist)
+		return r
+		
 	def setSpeed(self, v):
 		"""
 		Sets both translation stage speeds
@@ -82,10 +112,23 @@ class Mach1():
 		converts to numbers that the stage wants and calls a command in the cmd dictionary
 		"""
 		converted = self.convertSpeed(v)
+		print(converted)
 		# set both stage speeds
 		self.zaberSend(Mach1.translation["hor"], self.cmd["setTargetSpeed"], data = converted)
 		self.zaberSend(Mach1.translation["ver"], self.cmd["setTargetSpeed"], data = converted)
 
+	def wait(self):
+		"""
+		stops program until both stages return idle statuses
+		"""
+		while True:
+			r1 = self.zaberSend(self.translation["hor"], self.cmd["returnStatus"], data=0)
+			r2 = self.zaberSend(self.translation["ver"], self.cmd["returnStatus"], data=0)
+			if r1[2] == 0 and r2[2] == 0:
+				break
+			else:
+				time.sleep(.01)
+		
 	def getSingleMeasurement(self, ch = "CH1"):
 		"""
 		ch - "CH1" or "CH2"
