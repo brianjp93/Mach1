@@ -33,8 +33,6 @@ def snake(diameter, dx, dev):
 	does a single vertical scan, moves over dx, does another vertical scan, ends at new position
 	returns x, y, v1, v2 for first scan and then reversed x_2, y_2, v1_2, v2_2 of second scan
 	"""
-	xaddr = 0 # address of stored current x location in zaber stage
-	yaddr = 0 # address of stored current y location in zaber stage
 	print("storing locations...")
 	dev.zaberStoreLocation(dev.translation["hor"], 1)
 	dev.zaberStoreLocation(dev.translation["ver"], 2) #different address just in case stage combines memory or something
@@ -107,17 +105,17 @@ traversed = 0
 while traversed < opticDiameter:
 	print("Beginning snake function")
 	temp_x, temp_y, temp_v1, temp_v2, temp_x_2, temp_y_2, temp_v1_2, temp_v2_2 = snake(opticDiameter, dx, dev)
+	traversed += dx
 	print("snake finished.")
 	print("Appending master lists")
-	x +=(temp_x + temp_x_2)
-	# x.append(temp_x_2)
-	y += (temp_y + temp_y_2)
-	# y.append(temp_y_2)
-	v1 += (temp_v1 + temp_v1_2)
-	# v1.append(temp_v1_2)
-	v2 += (temp_v2 + temp_v2_2)
-	# v2.append(temp_v2_2)
-	traversed += dx
+	x.append(temp_x)
+	x.append(temp_x_2)
+	y.append(temp_y)
+	y.append(temp_y_2)
+	v1.append(temp_v1)
+	v1.append(temp_v1_2)
+	v2.append(temp_v2)
+	v2.append(temp_v2_2)
 	
 print(x)
 print(y)
@@ -133,6 +131,6 @@ y = np.array(y)
 v1 = np.array(v1)
 v2 = np.array(v2)
 vtot = v2-v1
-x,y = np.meshgrid(x,y)
+# Should already be in meshgrid format?
 plt.contourf(x,y,vtot)
 plt.show()

@@ -21,7 +21,7 @@ class Mach1():
 	"returnStatus": 54
 	}
 
-	translation = {"hor": 1, "ver": 2}
+	translation = {"both": 0, "hor": 1, "ver": 2}
 	# microstep in mm
 	microstep = 0.00009921875
 
