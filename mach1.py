@@ -138,6 +138,8 @@ class Mach1():
 		"""
 		counter = 1
 		# added try except block to take care of times when get_waveform() has a problem.
+		# this seems to take a long time.  Calling for data from oscilloscope is slow... May need to
+		#     Take many samples at once, receive data all at once.
 		while True:
 			try:		
 				waveform = self.osc.get_waveform(source = ch, start = 0, stop = 0)

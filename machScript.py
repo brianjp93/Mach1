@@ -12,21 +12,22 @@ import matplotlib.pyplot as plt
 print("setting variables")
 opticDiameter = 50 # mm
 numScans = 2 # number of scans to do across the optic
-dx = opticDiameter/numScans # distance to move horizontally each time a scan finishes
+dx = opticDiameter / numScans  # distance to move horizontally each time a scan finishes
 
 
 print("dev = Mach1 object")
-dev = Mach1(oscPort = "COM1", zaberStagePort = 2)
+dev = Mach1(oscPort="COM1", zaberStagePort=2)
 # print("setting speed...")
 # dev.setSpeed(.5) # mm/s
 
-x = [] # x-position
-y = [] # y-position
-v1 = [] # voltage ch1
-v2 = [] # voltage ch2
+x = []  # x-position
+y = []  # y-position
+v1 = []  # voltage ch1
+v2 = []  # voltage ch2
 
 dev.zaberStoreLocation(dev.translation["hor"], 14)
 dev.zaberStoreLocation(dev.translation["ver"], 15)
+
 
 def snake(diameter, dx, dev):
 	"""
@@ -125,12 +126,12 @@ print(v2)
 # return to starting position
 # dev.zaberMoveToStoredLocation(dev.translation["hor"], 14)
 # dev.zaberMoveToStoredLocation(dev.translation["ver"], 15)
-print dev.zaberMove("hor", command = dev.cmd["moveRelative"], data = -opticDiameter)
+print dev.zaberMove("hor", command = dev.cmd["moveRelative"], data=(-opticDiameter))
 x = np.array(x)
 y = np.array(y)
 v1 = np.array(v1)
 v2 = np.array(v2)
 vtot = v2-v1
 # Should already be in meshgrid format?
-plt.contourf(x,y,vtot)
+plt.contourf(x, y, vtot)
 plt.show()
