@@ -73,7 +73,7 @@ oscilloscope = None
 
 
 # Single sequence scope acquisition
-def acquire_samples(channel_list, samples = 2500):
+def acquire_samples(channel_list, samples=2500):
   for channel in [1,2,3,4]:
     if channel in channel_list:
       write("select:ch" + str(channel) + " on")
