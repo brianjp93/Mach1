@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 # relevant variables
 print("setting variables")
 opticDiameter = 50 # mm
-numScans = 2 # number of scans to do across the optic
+numScans = 4 # number of scans to do across the optic
 dx = opticDiameter / numScans  # distance to move horizontally each time a scan finishes
 
 

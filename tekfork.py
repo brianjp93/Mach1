@@ -51,8 +51,9 @@ set_volts_per_division(channel,volts):
 #################################################################
 # Import libraries
 #################################################################
-import sys, time, os, visa
-from errors import Error
+import sys, time, os
+from visa import *
+# from errors import Error
 
 #################################################################
 # Global Declarations
@@ -60,12 +61,13 @@ from errors import Error
 Debug = 0  # set to 1 to enable printing of error codes
 end_of_line = "\n"
 # scope_resource_name = "USB::0x0699::0x036A::C041309::INSTR"
-scope_resource_name = "COM1"
+scope_resource_name = "ASRL1::INSTR"
+# scope_resource_name = "COM1"
 
 #################################################################
 # Global Variables
 #################################################################
-oscilloscope = None
+oscilloscope = instrument(scope_resource_name)
 
 #################################################################
 # Function definitions
@@ -191,11 +193,11 @@ def write(command_code):
   global oscilloscope
   try:
     if oscilloscope == None:
-      oscilloscope = visa.instrument(scope_resource_name)
+      oscilloscope = Instrument(scope_resource_name)
     if Debug:
       print "write: " + command_code
     oscilloscope.write(command_code)
-  except visa.VisaIOError:
+  except VisaIOError:
     print "ERROR: Unable to open the USB communication link to the "\
     "Tektronix TDS2024B, make sure it is plugged in."
 
@@ -205,12 +207,12 @@ def read():
   global oscilloscope
   try:
     if oscilloscope == None:
-      oscilloscope = visa.instrument(scope_resource_name)
+      oscilloscope = instrument(scope_resource_name)
     data = oscilloscope.read()
     if Debug:
       print "read: " + data
     return data
-  except visa.VisaIOError:
+  except VisaIOError:
     print "ERROR: Unable to open the USB communication link to the "\
     "Tektronix TDS2024B, make sure it is plugged in."
 
