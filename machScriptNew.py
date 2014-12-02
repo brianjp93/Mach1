@@ -11,9 +11,9 @@ import matplotlib.pyplot as plt
 
 # relevant variables
 print("setting variables")
-opticDiameter = 50 # mm
+opticDiameter = int(raw_input("Diameter of the optic (mm): "))
 print("optic diameter = " + str(opticDiameter) + " mm.")
-numScans = 4 # number of scans to do across the optic
+numScans = int(raw_input("# vertical scans: ")) # number of scans to do across the optic
 print("# Vertical Scans = " + str(numScans) + ".  " + str(numScans**2) + " measurements to be taken.")
 dx = opticDiameter / numScans  # mm distance to move horizontally each time a scan finishes
 

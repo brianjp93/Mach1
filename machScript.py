@@ -106,7 +106,7 @@ traversed = 0
 while traversed < opticDiameter:
 	print("Beginning snake function")
 	temp_x, temp_y, temp_v1, temp_v2, temp_x_2, temp_y_2, temp_v1_2, temp_v2_2 = snake(opticDiameter, dx, dev)
-	traversed += dx
+	traversed += 2*dx
 	print("snake finished.")
 	print("Appending master lists")
 	x.append(temp_x)

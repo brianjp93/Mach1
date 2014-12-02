@@ -150,3 +150,24 @@ class Mach1():
 		for x,y in waveform:
 			voltage = y
 		return voltage
+
+	def getAvgOfSamples(self, ch = "CH1", samples = 100):
+		"""
+		gets a continuous stream of <samples> samples, and then get their average and return a single value.
+		__Variables__
+			ch		- which channel you want to take the measurement from.  Defaults to CH1
+			samples - Number of samples you would like to average
+		"""
+		counter = 1
+		while True:
+			try:		
+				waveform = self.osc.get_waveform(source = ch, start = 0, stop = 99)
+				break
+			except:
+				print("Retry: " + str(counter))
+				counter += 1
+		y_array = []
+		for x,y in waveform:
+			y_array.append(y)
+		voltage = sum(y_array)/len(y_array)
+		return voltage
