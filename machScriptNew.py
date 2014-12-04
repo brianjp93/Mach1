@@ -60,7 +60,7 @@ def snake(dx, dev):
 	#############################################
 
 	#  move horizontal
-	print("Moving horizontal dx")
+	print("Moving horizontal " + str(dx) + "mm.")
 	print dev.zaberMove("hor", command = dev.cmd["moveRelative"], data = dx)
 	# time.sleep(10)
 	x_loc += dx
@@ -75,7 +75,7 @@ def snake(dx, dev):
 	#############################################
 
 	#  move horizontal
-	print("moving horizontal dx")
+	print("moving horizontal " + str(dx) + "mm.")
 	print dev.zaberMove("hor", command = dev.cmd["moveRelative"], data = dx)
 	x_loc += dx
 
@@ -100,7 +100,7 @@ def move_up():
 	y_array.append(total_dist)
 	while total_dist < opticDiameter:
 		print("getting and appending voltage lists")
-		print("Moving vertical stage dx")
+		print("Moving vertical stage " + str(dx) + "mm.")
 		total_dist += dx
 		print(dev.zaberMove("ver", command = dev.cmd["moveRelative"], data = dx))
 		# time.sleep(10)
@@ -130,7 +130,7 @@ def move_down():
 		print("getting and appending voltage lists")
 		v1.append(dev.getSingleMeasurement(ch = "CH1"))
 		v2.append(dev.getSingleMeasurement(ch = "CH2"))
-		print("Moving vertical stage dx")
+		print("Moving vertical stage " + str(dx) + "mm.")
 		print dev.zaberMove("ver", command = dev.cmd["moveRelative"], data = -dx)
 		# time.sleep(10)
 		total_dist -= dx
@@ -183,14 +183,14 @@ if __name__ == "__main__":
 
 		# write data into text files, just in case something screws up
 		#     we will still have all the data we took before the crash.
-		with open("x_" + num, "a") as f:
-			f.write(temp_x[0] + "\n" + temp_x[1] + "\n")
-		with open("y_" + num, "a") as f:
-			f.write(temp_y[0] + "\n" + temp_y[1] + "\n")
-		with open("v1_" + num, "a") as f:
-			f.write(temp_v1[0] + "\n" + temp_v1[1] + "\n")
-		with open("v2_" + num, "a") as f:
-			f.write(temp_v2[0] + "\n" + temp_v2[1] + "\n")
+		with open("data/x_" + num, "a") as f:
+			f.write(" ".join(list(map(str, temp_x[0]))) + "\n" + " ".join(list(map(str, temp_x[1]))) + "\n")
+		with open("data/y_" + num, "a") as f:
+			f.write(" ".join(list(map(str, temp_y[0]))) + "\n" + " ".join(list(map(str, temp_y[1]))) + "\n")
+		with open("data/v1_" + num, "a") as f:
+			f.write(" ".join(list(map(str, temp_v1[0]))) + "\n" + " ".join(list(map(str, temp_v1[1]))) + "\n")
+		with open("data/v2_" + num, "a") as f:
+			f.write(" ".join(list(map(str, temp_v2[0]))) + "\n" + " ".join(list(map(str, temp_v2[1]))) + "\n")
 		
 
 	# print(x)
