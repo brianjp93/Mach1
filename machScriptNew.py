@@ -16,7 +16,8 @@ opticDiameter = int(raw_input("Diameter of the optic (mm): "))
 print("optic diameter = " + str(opticDiameter) + " mm.")
 numScans = int(raw_input("# vertical scans: ")) # number of scans to do across the optic
 print("# Vertical Scans = " + str(numScans) + ".  " + str(numScans**2) + " measurements to be taken.")
-dx = opticDiameter / numScans  # mm distance to move horizontally each time a scan finishes
+dx = float(opticDiameter) / float(numScans)  # mm distance to move horizontally each time a scan finishes
+print("Will move " + str(dx) + "mm each transition.")
 
 print("dev = Mach1 object")
 dev = Mach1(oscPort="COM1", zaberStagePort=2)
