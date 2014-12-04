@@ -167,7 +167,7 @@ def getFileNumber():
 if __name__ == "__main__":
 	traversed = 0
 	num = getFileNumber()
-	while traversed < opticDiameter:
+	while traversed <= opticDiameter:
 		print("Beginning snake function")
 		temp_x, temp_y, temp_v1, temp_v2 = snake(dx, dev)
 		traversed += 2 * dx
