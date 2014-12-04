@@ -203,12 +203,10 @@ if __name__ == "__main__":
 	# dev.zaberMoveToStoredLocation(dev.translation["hor"], 14)
 	# dev.zaberMoveToStoredLocation(dev.translation["ver"], 15)
 	# print dev.zaberMove("hor", command = dev.cmd["moveRelative"], data=(-opticDiameter))
+	
+	# got rid of end plotting script.
+	#     Just use the conFromFiles.py file.
 
-	x = np.array(x)
-	y = np.array(y)
-	v1 = np.array(v1)
-	v2 = np.array(v2)
-	vtot = v2-v1
-	# Should already be in meshgrid format?
-	plt.contourf(x, y, vtot)
-	plt.show()
+	# This last line is here just so the oscilloscope resets to take 2500 samples
+	waveform = tds.get_waveform(source="CH1", start=1, stop=2500)
+	waveform = tds.get_waveform(source="CH2", start=1, stop=2500)

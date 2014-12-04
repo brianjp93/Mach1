@@ -3,6 +3,9 @@ mach1.py
 Brian Perrett
 11/12/2014
 
+__dependencies__
+	- pytek
+
 Helps to use the zaber stage and Tektronix oscilloscope
 """
 import serial, struct, time, glob, sys

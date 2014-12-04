@@ -95,5 +95,14 @@ v2 = np.array(v2)
 # vtot = v2 - v1
 
 # Should already be in meshgrid format?
-plt.contourf(x, y, v2)
+# plt.contourf(x, y, v2)
+plt.figure()
+plt.imshow(v1)
+
+plt.figure()
+plt.imshow(v2)
+
+plt.figure()
+plt.imshow(v1 + v2)
+
 plt.show()
