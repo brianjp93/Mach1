@@ -156,7 +156,7 @@ def getFileNumber():
 		the string '7.txt'
 	"""
 	name = "x_1"
-	while os.path.isfile(name + ".txt"):
+	while os.path.isfile("data/" + name + ".txt"):
 		new = name.split("_")
 		name = new[0] + "_" + str(int(new[1]) + 1)
 	number = name.split("_")[1].split(".")[0]

@@ -21,21 +21,69 @@ v2 = []
 with open("data/x" + num, "r") as f:
 	for line in f:
 		line = list(map(float, line.rstrip().split()))
+		for i in range(len(line)):
+			a = i
+			forward = True
+			while line[i] < 0:
+				if a + 1 < len(line) and forward:
+					a += 1
+					line[i] = line[a]
+				elif a + 1 >= len(line):
+					forward = False
+				if not forward:
+					a -= 1
+					line[i] = line[a]
 		x.append(line)
 
 with open("data/y" + num, "r") as f:
 	for line in f:
 		line = list(map(float, line.rstrip().split()))
+		for i in range(len(line)):
+			a = i
+			forward = True
+			while line[i] < 0:
+				if a + 1 < len(line) and forward:
+					a += 1
+					line[i] = line[a]
+				elif a + 1 >= len(line):
+					forward = False
+				if not forward:
+					a -= 1
+					line[i] = line[a]
 		y.append(line)
 
 with open("data/v1" + num, "r") as f:
 	for line in f:
 		line = list(map(float, line.rstrip().split()))
+		for i in range(len(line)):
+			a = i
+			forward = True
+			while line[i] < 0:
+				if a + 1 < len(line) and forward:
+					a += 1
+					line[i] = line[a]
+				elif a + 1 >= len(line):
+					forward = False
+				if not forward:
+					a -= 1
+					line[i] = line[a]
 		v1.append(line)
 
 with open("data/v2" + num, "r") as f:
 	for line in f:
 		line = list(map(float, line.rstrip().split()))
+		for i in range(len(line)):
+			a = i
+			forward = True
+			while line[i] < 0:
+				if a + 1 < len(line) and forward:
+					a += 1
+					line[i] = line[a]
+				elif a + 1 >= len(line):
+					forward = False
+				if not forward:
+					a -= 1
+					line[i] = line[a]
 		v2.append(line)
 
 x = np.array(x)
@@ -44,8 +92,8 @@ x = np.array(x)
 y = np.array(y)
 v1 = np.array(v1)
 v2 = np.array(v2)
-vtot = v2 - v1
+# vtot = v2 - v1
 
 # Should already be in meshgrid format?
-plt.contourf(x, y, vtot)
+plt.contourf(x, y, v2)
 plt.show()
