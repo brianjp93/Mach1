@@ -8,6 +8,7 @@ from mach1 import Mach1
 # import time
 import numpy as np
 import matplotlib.pyplot as plt
+import os.path
 
 # relevant variables
 print("setting variables")
@@ -148,8 +149,23 @@ def move_down():
 	return x_array, y_array, v1, v2
 
 
+def getFileNumber():
+	"""
+	returns the string of the number file that has yet to be made.
+	For example, if the next x array file to made is x_7.txt, this will return
+		the string '7.txt'
+	"""
+	name = "x_1"
+	while os.path.isfile(name + ".txt"):
+		new = name.split("_")
+		name = new[0] + "_" + str(int(new[1]) + 1)
+	number = name.split("_")[1].split(".")[0]
+	return number + ".txt"
+
+
 if __name__ == "__main__":
 	traversed = 0
+	num = getFileNumber()
 	while traversed < opticDiameter:
 		print("Beginning snake function")
 		temp_x, temp_y, temp_v1, temp_v2 = snake(dx, dev)
@@ -164,7 +180,19 @@ if __name__ == "__main__":
 		v1.append(temp_v1[1])
 		v2.append(temp_v2[0])
 		v2.append(temp_v2[1])
+
+		# write data into text files, just in case something screws up
+		#     we will still have all the data we took before the crash.
+		with open("x_" + num, "a") as f:
+			f.write(temp_x[0] + "\n" + temp_x[1] + "\n")
+		with open("y_" + num, "a") as f:
+			f.write(temp_y[0] + "\n" + temp_y[1] + "\n")
+		with open("v1_" + num, "a") as f:
+			f.write(temp_v1[0] + "\n" + temp_v1[1] + "\n")
+		with open("v2_" + num, "a") as f:
+			f.write(temp_v2[0] + "\n" + temp_v2[1] + "\n")
 		
+
 	# print(x)
 	# print(y)
 	# print(v1)

@@ -25,8 +25,8 @@ y = []  # y-position
 v1 = []  # voltage ch1
 v2 = []  # voltage ch2
 
-dev.zaberStoreLocation(dev.translation["hor"], 14)
-dev.zaberStoreLocation(dev.translation["ver"], 15)
+dev.zaberStoreLocation("hor", 14)
+dev.zaberStoreLocation("ver", 15)
 
 
 def snake(diameter, dx, dev):
