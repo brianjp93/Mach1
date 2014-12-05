@@ -3,17 +3,18 @@ mach1.py
 Brian Perrett
 11/12/2014
 
+Helps to use the zaber stage and Tektronix oscilloscope
+
 __dependencies__
 	- pytek
 	- pyserial
-
-Helps to use the zaber stage and Tektronix oscilloscope
 
 __TODO__
 	Write a separate class for the oscilloscope.
 """
 import serial, struct, time, glob, sys
 from pytek import TDS3k
+from __future__ import division
 
 class Mach1():
 	# static variables
