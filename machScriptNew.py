@@ -199,6 +199,7 @@ if __name__ == "__main__":
 	# print(v1)
 	# print(v2)
 
+	# Not doing this bit.  Storing positions seems finicky.  did not work as expected.
 	# return to starting position
 	# dev.zaberMoveToStoredLocation(dev.translation["hor"], 14)
 	# dev.zaberMoveToStoredLocation(dev.translation["ver"], 15)

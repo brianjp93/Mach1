@@ -5,8 +5,12 @@ Brian Perrett
 
 __dependencies__
 	- pytek
+	- pyserial
 
 Helps to use the zaber stage and Tektronix oscilloscope
+
+__TODO__
+	Write a separate class for the oscilloscope.
 """
 import serial, struct, time, glob, sys
 from pytek import TDS3k
@@ -31,8 +35,8 @@ class Mach1():
 	def __init__(self, oscPort = "COM1", zaberStagePort = 2):
 		"""
 		initialize variables.
-		oscPort - Port for oscilloscope.  COM1 by default.  Could be COM2 or 3 as well.
-		zaberStagePort - Port for zaber stage.  2 by default.  Could be 0 or 1.
+		oscPort 		- Port for oscilloscope.  COM1 by default.  Could be COM2 or 3 as well.
+		zaberStagePort 	- Port for zaber stage.  2 by default.  Could be 0 or 1.
 		"""
 		# Serial() input depends on where stage is connected
 		self.stage = serial.Serial(zaberStagePort)
@@ -62,7 +66,7 @@ class Mach1():
 		"""
 		stores location data at given address in the zaber stage.
 		__Variables__
-		stage - hor or ver
+		stage 	- hor or ver
 		address - number 0-15
 		"""
 		self.zaberSend(stage, self.cmd["storeCurrentPosition"], address)
@@ -71,7 +75,7 @@ class Mach1():
 		"""
 		Moves to stored location at given address in the zaber stage.
 		__Variables__
-		stage - hor or ver
+		stage 	- hor or ver
 		address - number 0-15
 		"""
 		self.zaberSend(stage, self.cmd["moveToStoredPosition"], address)
@@ -90,22 +94,19 @@ class Mach1():
 		__Variables__
 		v - in mm/s
 		"""
-		converted = v/(Mach1.microstep*9.375)
+		converted = v/(self.microstep*9.375)
 		return converted
 
-	def zaberMove(self, stage, command = None, data = None):
+	def zaberMove(self, stage, command, data):
 		"""
 		Moves horizontal or vertical translation stage data mm.
 		__Variables__
-		stage - "hor" or "ver"
+		stage 	- "hor" or "ver"
 		command - one of the movement commands from the cmd dictionary.
-		data - a distance in mm.
+		data 	- a distance in mm.
 		"""
-		if command == None or data == None:
-			raise Exception("Method zaberMove must take inputs command, data.")
-		else:
-			dist = self.convertDistance(data)
-			r = self.zaberSend(stage, command, dist)
+		dist = self.convertDistance(data)
+		r = self.zaberSend(stage, command, dist)
 		return r
 		
 	def setSpeed(self, v):
@@ -113,16 +114,18 @@ class Mach1():
 		Sets both translation stage speeds
 		__Variables__
 		v - speed to set in mm
-		converts to numbers that the stage wants and calls a command in the cmd dictionary
+			converts to numbers that the stage wants and calls a command in the cmd dictionary
 		"""
 		converted = self.convertSpeed(v)
 		print(converted)
 		# set both stage speeds
-		self.zaberSend(Mach1.translation["hor"], self.cmd["setTargetSpeed"], data = converted)
-		self.zaberSend(Mach1.translation["ver"], self.cmd["setTargetSpeed"], data = converted)
+		self.zaberSend(self.translation["hor"], self.cmd["setTargetSpeed"], data = converted)
+		self.zaberSend(self.translation["ver"], self.cmd["setTargetSpeed"], data = converted)
 
 	def wait(self):
 		"""
+		__UNTESTED__
+
 		stops program until both stages return idle statuses
 		"""
 		while True:
@@ -135,9 +138,10 @@ class Mach1():
 		
 	def getSingleMeasurement(self, ch = "CH1"):
 		"""
-		ch - "CH1" or "CH2"
 			input which channel you want data from.
 		returns y value from get_waveform() aka Voltage Reading from oscilloscope
+		__Variables__
+		ch - "CH1" or "CH2"
 		"""
 		counter = 1
 		# added try except block to take care of times when get_waveform() has a problem.
