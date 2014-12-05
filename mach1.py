@@ -5,6 +5,7 @@ Brian Perrett
 
 __dependencies__
 	- pytek
+	- pyserial
 
 Helps to use the zaber stage and Tektronix oscilloscope
 """
@@ -31,8 +32,11 @@ class Mach1():
 	def __init__(self, oscPort = "COM1", zaberStagePort = 2):
 		"""
 		initialize variables.
-		oscPort - Port for oscilloscope.  COM1 by default.  Could be COM2 or 3 as well.
-		zaberStagePort - Port for zaber stage.  2 by default.  Could be 0 or 1.
+		oscPort 		- Port for oscilloscope.  COM1 by default.  Could be COM2 or 3 as well.
+		zaberStagePort 	- Port for zaber stage.  2 by default.  Could be 0 or 1.
+			0 -> COM1
+			1 -> COM2
+			2 -> COM3
 		"""
 		# Serial() input depends on where stage is connected
 		self.stage = serial.Serial(zaberStagePort)
@@ -69,7 +73,10 @@ class Mach1():
 
 	def zaberMoveToStoredLocation(self, stage, address):
 		"""
+		__UNTESTED__
+
 		Moves to stored location at given address in the zaber stage.
+
 		__Variables__
 		stage - hor or ver
 		address - number 0-15
