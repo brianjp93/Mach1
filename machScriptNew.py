@@ -5,10 +5,8 @@ Brian Perrett
 Cleaner script for moving the zaber stage and making measurements with the mach zehnder interferometer
 """
 from mach1 import Mach1
-# import time
-import numpy as np
-import matplotlib.pyplot as plt
 import os.path
+from __future__ import division
 
 # relevant variables
 print("setting variables")

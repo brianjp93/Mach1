@@ -6,6 +6,7 @@ from pytek import TDS3k
 import matplotlib.pyplot as plt
 import numpy as np
 import time
+from __future__ import division
 
 # number of points to record
 rLength = 2500

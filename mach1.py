@@ -11,6 +11,7 @@ Helps to use the zaber stage and Tektronix oscilloscope
 """
 import serial, struct, time, glob, sys
 from pytek import TDS3k
+from __future__ import division
 
 class Mach1():
 	# static variables
