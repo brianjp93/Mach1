@@ -171,7 +171,7 @@ class Mach1():
 		counter = 1
 		while True:
 			try:		
-				waveform = self.osc.get_waveform(source = ch, start = 0, stop = samples - 1)
+				waveform = self.osc.get_waveform(source = ch, start = 1, stop = samples)
 				break
 			except:
 				print("Retry: " + str(counter))
