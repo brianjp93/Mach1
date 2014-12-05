@@ -1,12 +1,12 @@
 """
 pytektest.py
 """
+from __future__ import division
 from serial import Serial
 from pytek import TDS3k
 import matplotlib.pyplot as plt
 import numpy as np
 import time
-from __future__ import division
 
 # number of points to record
 rLength = 2500
@@ -24,8 +24,10 @@ d = []
 
 print tds.trigger_state()
 
-tds.trigger_auto([False])
-tds.acquire_single([True])
+# tds.trigger_auto([False])
+# tds.acquire_single([True])
+
+
 
 tds.trigger()
 print tds.trigger_state()

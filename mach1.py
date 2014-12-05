@@ -12,9 +12,9 @@ __dependencies__
 __TODO__
 	Write a separate class for the oscilloscope.
 """
+from __future__ import division
 import serial, struct, time, glob, sys
 from pytek import TDS3k
-from __future__ import division
 
 class Mach1():
 	# static variables
@@ -42,7 +42,7 @@ class Mach1():
 		# Serial() input depends on where stage is connected
 		self.stage = serial.Serial(zaberStagePort)
 		# 9600 = baudrate
-		self.osc = TDS3k(serial.Serial(oscPort, 9600, timeout=1))
+		self.osc = TDS3k(serial.Serial(oscPort, 9600, timeout=0))
 
 	def zaberReceive(self):
 		# return 6 bytes from the receive buffer
@@ -150,7 +150,7 @@ class Mach1():
 		#     Take many samples at once, receive data all at once.
 		while True:
 			try:		
-				waveform = self.osc.get_waveform(source = ch, start = 0, stop = 0)
+				waveform = self.osc.get_waveform(source = ch, start = 1, stop = 1)
 				break
 			except:
 				print("Retry: " + str(counter))
@@ -169,7 +169,7 @@ class Mach1():
 		counter = 1
 		while True:
 			try:		
-				waveform = self.osc.get_waveform(source = ch, start = 0, stop = samples - 1)
+				waveform = self.osc.get_waveform(source = ch, start = 1, stop = samples)
 				break
 			except:
 				print("Retry: " + str(counter))
@@ -179,3 +179,20 @@ class Mach1():
 			y_array.append(y)
 		voltage = sum(y_array)/len(y_array)
 		return voltage
+
+	def setAquireState(arg):
+		"""
+		sends ACQuire:STATE command to tektronix oscilloscope
+		Manual says this is equivalent to hitting the RUN/STOP button.
+		__Variables__
+		String arg - { OFF | ON | RUN | STOP | <NR1> }
+		"""
+		self.osc.send_command("ACQ:STATE", arg)
+
+	def setStopAfter(arg):
+		"""
+		sends ACQuire:STOPAfter command to tektronix oscilloscope
+		__Variables__
+		String arg - { RUNSTop | SEQuence }
+		"""
+		self.osc.send_command("ACQ:STOPA", arg)
