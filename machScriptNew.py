@@ -4,9 +4,9 @@ Brian Perrett
 11/26/2014
 Cleaner script for moving the zaber stage and making measurements with the mach zehnder interferometer
 """
+from __future__ import division
 from mach1 import Mach1
 import os.path
-from __future__ import division
 
 # relevant variables
 print("setting variables")

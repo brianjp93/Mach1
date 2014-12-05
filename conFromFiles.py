@@ -2,9 +2,9 @@
 conFromFiles.py
 reads x, y, v1, and v2 array files and creates contour plots from them
 """
+from __future__ import division
 import numpy as np
 import matplotlib.pyplot as plt
-from __future__ import division
 
 
 num = input("What file number would you like to plot?  (integer): ")
