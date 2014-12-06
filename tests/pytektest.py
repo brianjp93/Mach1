@@ -27,7 +27,8 @@ print tds.trigger_state()
 # tds.trigger_auto([False])
 # tds.acquire_single([True])
 
-
+tds.send_command("ACQ:STATE", "RUN")
+tds.send_command("ACQ:STOPA", "SEQ")
 
 tds.trigger()
 print tds.trigger_state()
@@ -38,6 +39,7 @@ waveform_acquired = False
 while not waveform_acquired:
 	try:
 		waveform = tds.get_waveform(source="CH1", start=1, stop=rLength)
+		waveform2 = tds.get_waveform(source="CH2", start=1, stop=rLength)
 		waveform_acquired = True
 	except:
 		print("Trying again.")
@@ -48,6 +50,9 @@ while not waveform_acquired:
 for x,y in waveform:
 	a.append(x)
 	b.append(y)
+
+for x,y in waveform2:
+	d.append(y)
 	
 # for x,y in waveform2:
 	# c.append(x)
@@ -55,10 +60,15 @@ for x,y in waveform:
 	
 x = np.linspace(0, rLength - 1, rLength)
 b = np.array(b)
+d = np.array(d)
 
 print(x)
 print(b)
-
+plt.figure()
 plt.plot(x, b)
 # plt.plot(c,d)
+
+plt.figure()
+plt.plot(x, d)
+
 plt.show()

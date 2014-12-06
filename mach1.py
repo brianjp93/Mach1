@@ -42,7 +42,7 @@ class Mach1():
 		# Serial() input depends on where stage is connected
 		self.stage = serial.Serial(zaberStagePort)
 		# 9600 = baudrate
-		self.osc = TDS3k(serial.Serial(oscPort, 9600, timeout=0))
+		self.osc = TDS3k(serial.Serial(oscPort, 9600, timeout=1))
 
 	def zaberReceive(self):
 		# return 6 bytes from the receive buffer
@@ -150,7 +150,7 @@ class Mach1():
 		#     Take many samples at once, receive data all at once.
 		while True:
 			try:		
-				waveform = self.osc.get_waveform(source = ch, start = 1, stop = 1)
+				waveform = self.osc.get_waveform(source = ch, start = 0, stop = 0)
 				break
 			except:
 				print("Retry: " + str(counter))
@@ -196,3 +196,12 @@ class Mach1():
 		String arg - { RUNSTop | SEQuence }
 		"""
 		self.osc.send_command("ACQ:STOPA", arg)
+
+	def setSecDiv(arg):
+		"""
+		__Variables__
+		String arg - some number of seconds
+			inputting "2" sets the divisions to 2.5 seconds.
+		"""
+		valid = ["1", "2", "5", "10"]
+		self.osc.send_command("HOR:MAI:SCA", arg)

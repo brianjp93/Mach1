@@ -20,7 +20,7 @@ print("Will move " + str(dx) + "mm each transition.")
 print("dev = Mach1 object")
 dev = Mach1(oscPort="COM1", zaberStagePort=2)
 # print("setting speed...")
-# dev.setSpeed(.5) # mm/s
+# dev.setSpeed(2) # mm/s
 
 x = []  # x-position
 y = []  # y-position
