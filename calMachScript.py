@@ -4,12 +4,6 @@ December 12, 2014
 calMachScript.py
 """
 
-"""
-machScriptNew.py
-Brian Perrett
-11/26/2014
-Cleaner script for moving the zaber stage and making measurements with the mach zehnder interferometer
-"""
 from __future__ import division
 from mach1 import Mach1
 import os.path
@@ -19,7 +13,7 @@ print("setting variables")
 opticDiameter = int(raw_input("Diameter of the optic (mm): "))
 print("optic diameter = " + str(opticDiameter) + " mm.")
 numScans = int(raw_input("# vertical scans: ")) # number of scans to do across the optic
-print("# Vertical Scans = " + str(numScans) + ".  " + str(numScans**2) + " measurements to be taken.")
+print("# Vertical Scans = " + str(numScans) + ".")
 dx = float(opticDiameter) / float(numScans)  # mm distance to move horizontally each time a scan finishes
 print("Will move " + str(dx) + "mm each transition.")
 

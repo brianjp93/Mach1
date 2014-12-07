@@ -54,8 +54,10 @@ class Mach1():
 
 	def zaberSend(self, device, command, data=0):
 		"""
-		send a packet using the specified device number, command number, and data
-		The data argument is optional and defaults to zero
+		Generally not used by user.
+			used by all zaber functions to send commands to the zaber stage.
+			send a packet using the specified device number, command number, and data
+			The data argument is optional and defaults to zero (really shouldn't be optional though, you kind of need it)
 		device - "hor" or "ver"
 		"""
 		packet = struct.pack('<BBl', self.translation[device], command, data)
@@ -83,7 +85,9 @@ class Mach1():
 
 	def convertDistance(self, mm):
 		"""
-		converts mm to microsteps
+		Generally not used by user.
+			Used internally by zaber movement methods.
+			converts mm to microsteps
 		__Variables__
 		mm - millimeters 
 		"""
@@ -91,7 +95,9 @@ class Mach1():
 		
 	def convertSpeed(self, v):
 		"""
-		Converts v to units that make sense to stage and returns converted
+		Generally not used by user.
+			used by internal setSpeed method
+			Converts v to units that make sense to stage and returns converted
 		__Variables__
 		v - in mm/s
 		"""
@@ -203,7 +209,7 @@ class Mach1():
 			y_array.append(y)
 		return y_array
 
-	def setAquireState(arg):
+	def setAquireState(self, arg):
 		"""
 		sends ACQuire:STATE command to tektronix oscilloscope
 		Manual says this is equivalent to hitting the RUN/STOP button.
@@ -212,7 +218,7 @@ class Mach1():
 		"""
 		self.osc.send_command("ACQ:STATE", arg)
 
-	def setStopAfter(arg):
+	def setStopAfter(self, arg):
 		"""
 		sends ACQuire:STOPAfter command to tektronix oscilloscope
 		__Variables__
@@ -220,7 +226,7 @@ class Mach1():
 		"""
 		self.osc.send_command("ACQ:STOPA", arg)
 
-	def setSecDiv(arg):
+	def setSecDiv(self, arg):
 		"""
 		__Variables__
 		String arg - some number of seconds
@@ -231,7 +237,7 @@ class Mach1():
 
 	def trigger(self):
 		"""
-		trigger force
+		puts into ready, single sequence mode, then	forces a trigger.
 		"""
 		self.setAquireState("RUN")
 		self.setStopAfter("SEQ")
@@ -239,7 +245,10 @@ class Mach1():
 
 	def isReady(self):
 		"""
-		returns True if oscilloscope is done taking measurements
+		waits for the oscilloscope to be done taking measurements before returning True.
+		
+		perhaps not a good method name.  The oscilloscope will end in
+			"acquisition done" mode and not "ready"
 		"""
 		while self.osc.trigger_state() != "save":
 			time.sleep(.1)
