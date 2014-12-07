@@ -137,6 +137,10 @@ class Mach1():
 			else:
 				time.sleep(.01)
 		
+	##################################################
+	# Start Oscilloscope Methods
+	##################################################
+
 	def getSingleMeasurement(self, ch = "CH1"):
 		"""
 			input which channel you want data from.
@@ -166,6 +170,7 @@ class Mach1():
 			ch		- which channel you want to take the measurement from.  Defaults to CH1
 			samples - Number of samples you would like to average
 		"""
+		self.isReady()
 		counter = 1
 		while True:
 			try:		
@@ -179,6 +184,24 @@ class Mach1():
 			y_array.append(y)
 		voltage = sum(y_array)/len(y_array)
 		return voltage
+
+	def getWaveform(self, ch="CH1", samples=2500):
+		"""
+		return waveform value list
+		"""
+		self.isReady()
+		counter = 1
+		while True:
+			try:		
+				waveform = self.osc.get_waveform(source = ch, start = 1, stop = samples)
+				break
+			except:
+				print("Retry: " + str(counter))
+				counter += 1
+		y_array = []
+		for x,y in waveform:
+			y_array.append(y)
+		return y_array
 
 	def setAquireState(arg):
 		"""
@@ -205,3 +228,19 @@ class Mach1():
 		"""
 		valid = ["1", "2", "5", "10"]
 		self.osc.send_command("HOR:MAI:SCA", arg)
+
+	def trigger(self):
+		"""
+		trigger force
+		"""
+		self.setAquireState("RUN")
+		self.setStopAfter("SEQ")
+		self.osc.trigger()
+
+	def isReady(self):
+		"""
+		returns True if oscilloscope is done taking measurements
+		"""
+		while self.osc.trigger_state() != "save":
+			time.sleep(.1)
+		return True
