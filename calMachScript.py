@@ -19,6 +19,7 @@ print("Will move " + str(dx) + "mm each transition.")
 
 print("dev = Mach1 object")
 dev = Mach1(oscPort="COM1", zaberStagePort=2)
+dev.setSecDiv("2")
 # print("setting speed...")
 # dev.setSpeed(2) # mm/s
 
@@ -179,6 +180,7 @@ def calibrateHere():
 	"""
 	Moves up and takes a calibration measurement.
 	returns calibration float
+	10 second calibration (not sure how to set the sec/div to anything lower than 1 second)
 	"""
 	global dev
 	dev.setSecDiv("1")
@@ -192,6 +194,7 @@ def calibrateUp():
 	"""
 	Moves up and takes a calibration measurement.
 	returns calibration float
+	10 second calibration (not sure how to set the sec/div to anything lower than 1 second)
 	"""
 	global dev
 	dev.setSecDiv("1")
@@ -209,6 +212,7 @@ def calibrateDown():
 	"""
 	Moves down and takes a calibration measurement.
 	returns calibration float
+	10 second calibration (not sure how to set the sec/div to anything lower than 1 second)
 	"""
 	global dev
 	dev.setSecDiv("1")
